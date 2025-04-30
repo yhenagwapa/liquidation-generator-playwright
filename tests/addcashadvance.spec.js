@@ -21,7 +21,7 @@ test.describe('Add Cash Advance', () => {
       await page.getByRole('link', { name: 'Add Cash Advance' }).click();
       await expect(page.getByRole('heading', { name: 'Add Cash Advances', exact: true })).toBeVisible();
 
-      await page.getByLabel('Special Disbursing Officer').fill('Valid SDO');
+      await page.getByLabel('Special Disbursing Officer').fill('SDO Test');
       await page.getByLabel('Position').fill('Valid Position');
       await page.getByLabel('Station').fill('Valid Station');
       await page.getByLabel('Check Number').fill('ABCDEF123456');
