@@ -252,7 +252,7 @@ test.describe('Actions in List of Cash Advance', () => {
         await expect(newPage).toHaveURL(/rcd/, { timeout: 60000 });
 
         await newPage.selectOption('select#liquidationMode', { label: 'Per Bundle'});
-
+``
         const bundleOptions = await newPage.locator('//div//input[@id="nameFrom"]');
         await expect(bundleOptions).toBeVisible();
 
