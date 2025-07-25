@@ -1,20 +1,19 @@
 // @ts-nocheck
 import { test, expect } from '@playwright/test';
 
-test.describe('Add Cash Advance', () => {
+test.describe('Cash Advance Page', () => {
     test.beforeEach(async ({ page }) => {
       await page.goto('https://172.31.176.49/liquidation-generator/public/');
 
       await page.getByLabel('Email').fill('test@gmail.com');
-      await page.getByLabel('Password').fill('dswd12345');
-      await page.getByRole('button').click();
+      await page.getByLabel('Password').fill('Dswd@12345');
+      await page.getByRole('button', { name: 'Log in' }).click();
 
       await expect(page.getByRole('heading', { name: 'Dashboard', exact: true })).toBeVisible();
-    });
-  
-    test('Go to add cash advance', async ({ page }) => {
-      await page.getByRole('link', { name: 'Add Cash Advance' }).click();
-      await expect(page.getByRole('heading', { name: 'Add Cash Advances', exact: true })).toBeVisible();
+      
+      await page.getByRole('link', { name: 'Cash Advance' }).click();
+      await expect(page.getByRole('heading', { name: 'Cash Advance', exact: true })).toBeVisible();
+      
     });
 
     test('Add cash advance using valid entries', async ({ page }) => {
@@ -73,4 +72,6 @@ test.describe('Add Cash Advance', () => {
       const message = await input.evaluate((el, HTMLInputElement) => el.validationMessage);
       expect(message).toBe('Please fill out this field.');  
     });
+
+
 });
