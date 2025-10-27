@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Actions in List of Cash Advance', () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto('https://172.31.176.49/liquidation-generator/public/');
+      await page.goto('https://172.26.120.49/liquidation-generator/public/');
 
       await page.getByLabel('Email').fill('test@gmail.com');
-      await page.getByLabel('Password').fill('dswd12345');
+      await page.getByLabel('Password').fill('Dswd@12345');
       await page.getByRole('button').click();
 
       await expect(page.url()).toContain('/dashboard');

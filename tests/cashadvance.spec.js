@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Cash Advance Page', () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto('https://172.31.176.49/liquidation-generator/public/');
+      await page.goto('https://172.26.120.49/liquidation-generator/public/');
 
       await page.getByLabel('Email').fill('test@gmail.com');
       await page.getByLabel('Password').fill('Dswd@12345');
