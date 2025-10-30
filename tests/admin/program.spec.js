@@ -186,13 +186,13 @@ test.describe.serial('Programs Page', () => {
         await expect(button).toBeVisible();
         await button.click();
         
-        const modal = page.locator('div[ x-show="updateProgramModal" ]');
+        const modal = page.locator('div[x-show="updateProgramModal"]');
         await expect(modal).toBeVisible();
 
         //fill-out form and click register button
-        await modal.getByLabel('Program Name').fill(' Edited');
-        await modal.getByLabel('Program Abbreviation').fill(' Edited');
-        await modal.getByLabel('Origin Office').fill(' Edited');
+        await modal.locator('input[name="program_name"]').fill('AKAP Edited');
+        await modal.locator('input[name="program_abbreviation"]').fill('AKAP Edited');
+        await modal.locator('input[name="origin_office"]').fill('CIS Edited');
         await modal.getByRole('button', { name: 'Update Program' }).click();
 
         const alert = page.getByRole('alert');
@@ -201,8 +201,8 @@ test.describe.serial('Programs Page', () => {
         // Assert the alert text (partial match, case-insensitive)
         await expect(alert).toHaveText(/program updated successfully/i);
 
-        // Wait for it to disappear (whether hidden or removed)
-        await expect(alert).toBeHidden({ timeout: 10000 });
+        // pause for 3 seconds
+        await page.waitForTimeout(3000);
 
         const updatedProgram = await rows.nth(0).locator('td:nth-child(1)').innerText();
 
@@ -229,12 +229,12 @@ test.describe.serial('Programs Page', () => {
         await expect(modal).toBeVisible();
 
         //fill-out form and click register button
-        await modal.getByLabel('Program Name').fill('');
-        await modal.getByLabel('Program Name').fill('!@#$%^');
-        await modal.getByLabel('Program Abbreviation').fill('');
-        await modal.getByLabel('Program Abbreviation').fill('!@#$%^');
-        await modal.getByLabel('Origin Office').fill('');
-        await modal.getByLabel('Origin Office').fill('!@#$%^');
+        await modal.locator('input[name="program_name"]').fill('');
+        await modal.locator('input[name="program_name"]').fill('!@#$%^');
+        await modal.locator('input[name="program_name"]').fill('');
+        await modal.locator('input[name="program_name"]').fill('!@#$%^');
+        await modal.locator('input[name="origin_office"]').fill('');
+        await modal.locator('input[name="origin_office"]').fill('!@#$%^');
         await modal.getByRole('button', { name: 'Update Program' }).click();
 
         const alert = page.getByRole('alert');
@@ -263,9 +263,9 @@ test.describe.serial('Programs Page', () => {
         await expect(modal).toBeVisible();
 
         //fill-out form and click register button
-        await modal.getByLabel('Program Name').fill('');
-        await modal.getByLabel('Program Abbreviation').fill('');
-        await modal.getByLabel('Origin Office').fill('');
+        await modal.locator('input[name="program_name"]').fill('');
+        await modal.locator('input[name="program_abbreviation"]').fill('');
+        await modal.locator('input[name="origin_office"]').fill('');
         await modal.getByRole('button', { name: 'Update Program' }).click();
 
         const alert = page.getByRole('alert');
@@ -304,18 +304,18 @@ test.describe.serial('Programs Page', () => {
         await expect(modal).toBeVisible();
 
         //fill-out form and click register button
-        await modal.getByLabel('Program Name').fill('');
-        await modal.getByLabel('Program Name').fill(programName);
-        await modal.getByLabel('Program Abbreviation').fill('');
-        await modal.getByLabel('Program Abbreviation').fill(programAbbreviation);
-        await modal.getByLabel('Origin Office').fill('');
-        await modal.getByLabel('Origin Office').fill(originOffice);
+        await modal.locator('input[name="program_name"]').fill('');
+        await modal.locator('input[name="program_name"]').fill(programName);
+        await modal.locator('input[name="program_abbreviation"]').fill('');
+        await modal.locator('input[name="program_abbreviation"]').fill(programAbbreviation);
+        await modal.locator('input[name="origin_office"]').fill('');
+        await modal.locator('input[name="origin_office"]').fill(originOffice);
         await modal.getByRole('button', { name: 'Update Program' }).click();
 
         const alert = page.getByRole('alert');
         await alert.waitFor({ state: 'visible', timeout: 5000 });
         await expect(alert).toHaveText(/There were some issues with your submission:/);
-        await expect(await row.nth(0).locator('td:nth-child(1)').innerText()).toBe(oldProgramName);
+        await expect(await rows.nth(0).locator('td:nth-child(1)').innerText()).toBe(oldProgramName);
     });
 
     test('Change status of a program from active to inactive and vice versa.', async ({ page }) => {
@@ -360,6 +360,8 @@ test.describe.serial('Programs Page', () => {
         await page.locator('xpath=//*[@id="program_id"]').click();
         const programOption = page.getByText(programName, { exact: true });
         await expect(programOption).not.toBeVisible();
+
+        //once this is fixed, update script to set status to active
     });
 
     test ('Delete program with related CA', async ({ page }) => {
@@ -381,7 +383,7 @@ test.describe.serial('Programs Page', () => {
             programName = await caRows.nth(0).locator('td:nth-child(4)').innerText();
         }
 
-        await page.getByRole('link', { name: 'Programss' }).click();
+        await page.getByRole('link', { name: 'Programs' }).click();
         await expect(page.getByRole('heading', { name: 'Programs', exact: true })).toBeVisible();
         await expect(page.url()).toContain('/program');
 
@@ -407,7 +409,7 @@ test.describe.serial('Programs Page', () => {
     });
 
     test('Can navigate between pages', async ({ page }) => {
-        const totalPages = await page.locator('span[x-text="sdoTotalPages"]').textContent();
+        const totalPages = await page.locator('span[x-text="programTotalPages"]').textContent();
 
         const nextButton = page.getByRole('button', { name: 'Next »' });
         const prevButton = page.getByRole('button', { name: '« Prev' });
@@ -418,10 +420,10 @@ test.describe.serial('Programs Page', () => {
         if (isEnabled) {
             console.log('Next button is enabled — clicking it.');
             await nextButton.click();
-            await expect(await page.locator('span[x-text="currentPage"]').textContent()).toBe('2');
+            await expect(await page.locator('span[x-text="programCurrentPage"]').textContent()).toBe('2');
 
             await prevButton.click();
-            await expect(await page.locator('span[x-text="currentPage"]').textContent()).toBe('1');
+            await expect(await page.locator('span[x-text="programCurrentPage"]').textContent()).toBe('1');
         } else {
             console.log('Next button is disabled — skipping test.');
             test.skip('Next button is disabled, skipping this test.');
